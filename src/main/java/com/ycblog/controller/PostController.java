@@ -1,7 +1,9 @@
 package com.ycblog.controller;
 
 import com.ycblog.request.PostCreate;
+import com.ycblog.service.PostService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,21 +13,14 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class PostController {
 
+    private final PostService postService;
+
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostCreate params) throws Exception {
-//        if (result.hasErrors()) {
-//            List<FieldError> fieldErrors = result.getFieldErrors();
-//            FieldError firstFieldError = fieldErrors.get(0);
-//            String fieldName = firstFieldError.getField(); //title
-//
-//            String errorMessage = firstFieldError.getDefaultMessage();// error Message
-//            Map<String, String> error = new HashMap<>();
-//            error.put(fieldName, errorMessage);
-//
-//            return error;
-//        }
+    public Map<String, String> post(@RequestBody @Valid PostCreate request) throws Exception {
+        postService.write(request);
         return Map.of();
     }
 }
