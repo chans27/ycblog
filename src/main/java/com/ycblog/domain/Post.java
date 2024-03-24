@@ -2,6 +2,7 @@ package com.ycblog.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Post {
 
+    @Builder
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
