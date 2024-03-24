@@ -18,7 +18,10 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
-            ErrorResponse response = new ErrorResponse("400", "Bad Request.");
+            ErrorResponse response = ErrorResponse.builder()
+                    .code("400")
+                    .message("Bad Request.")
+                    .build();
 
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
