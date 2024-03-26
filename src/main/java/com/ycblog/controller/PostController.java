@@ -1,13 +1,12 @@
 package com.ycblog.controller;
 
+import com.ycblog.domain.Post;
 import com.ycblog.request.PostCreate;
 import com.ycblog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request) throws Exception {
+    public void post(@RequestBody @Valid PostCreate request) {
         // Case1. 저장한 데이터 Entity -> response로 응답
         // Case2. 저장한 데이터의 primary_id -> response로 응답
         //        Client에서는 수신한 id를 post조회 API를 통해서 글 데이터를 수신받음
@@ -28,4 +27,10 @@ public class PostController {
         //
         postService.write(request);
     }
+
+    @GetMapping("/posts/{postId}")
+    public Post get(@PathVariable(name = "postId") Long id) {
+        return postService.get(id);
+    }
+
 }
