@@ -3,6 +3,7 @@ package com.ycblog.service;
 import com.ycblog.domain.Post;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
+import com.ycblog.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +61,7 @@ class PostServiceTest {
         postRepository.save(requestPost);
 
         //when
-        Post post = postService.get(requestPost.getId());
+        PostResponse post = postService.get(requestPost.getId());
 
         //then
         assertNotNull(post);

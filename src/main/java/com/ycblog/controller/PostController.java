@@ -2,6 +2,7 @@ package com.ycblog.controller;
 
 import com.ycblog.domain.Post;
 import com.ycblog.request.PostCreate;
+import com.ycblog.response.PostResponse;
 import com.ycblog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public Post get(@PathVariable(name = "postId") Long id) {
+    public PostResponse get(@PathVariable(name = "postId") Long id) {
         return postService.get(id);
     }
 
