@@ -1,6 +1,7 @@
 package com.ycblog.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

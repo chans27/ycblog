@@ -115,17 +115,18 @@ class PostControllerTest {
     void test4() throws Exception {
         //given
         Post post = Post.builder()
-                .title("TITLES")
+                .title("123456789012345")
                 .content("CONTENTS")
                 .build();
         postRepository.save(post);
 
+        //타이틀 길이를 10글자로..
         //expected
         mockMvc.perform(get("/posts/{postId}", post.getId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("TITLES"))
+                .andExpect(jsonPath("$.title").value("1234567890"))
                 .andExpect(jsonPath("$.content").value("CONTENTS"))
                 .andDo(print());
     }
