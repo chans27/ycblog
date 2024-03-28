@@ -4,15 +4,16 @@ import com.ycblog.domain.Post;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
 import com.ycblog.response.PostResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class PostServiceTest {
@@ -67,5 +68,26 @@ class PostServiceTest {
         assertNotNull(post);
         assertEquals("TITLES", post.getTitle());
         assertEquals("CONTENTS", post.getContent());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test3() {
+        //given
+        postRepository.saveAll(List.of(
+                Post.builder()
+                .title("TITLES")
+                .content("CONTENTS")
+                .build(),
+                Post.builder()
+                        .title("TITLES2")
+                        .content("CONTENTS2")
+                        .build()
+                ));
+        //when
+        List<PostResponse> posts = postService.getList();
+
+        //then
+        assertEquals(posts.size(), 2L);
     }
 }
