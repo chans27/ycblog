@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ycblog.domain.Post;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
+import com.ycblog.request.PostEdit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,7 +43,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 Hello world를 출력")
+    @DisplayName("print hello world")
     void test() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
@@ -58,7 +58,7 @@ class PostControllerTest {
         //expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-                        //.content("{\"title\": \"제목\", \"content\": \"내용\"}")
+                        //.content("{\"title\": \"TITLE\", \"content\": \"CONTENT\"}")
                         .content(json)
                 )
                 .andExpect(status().isOk())
@@ -89,7 +89,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 DB에 값 저장")
+    @DisplayName("save to DB")
     void test3() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
@@ -116,7 +116,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 1개 조회")
+    @DisplayName("find one post")
     void test4() throws Exception {
         //given
         Post post = Post.builder()
@@ -125,7 +125,6 @@ class PostControllerTest {
                 .build();
         postRepository.save(post);
 
-        //타이틀 길이를 10글자로..
         //expected
         mockMvc.perform(get("/posts/{postId}", post.getId())
                         .contentType(APPLICATION_JSON))
@@ -137,7 +136,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("find multiple posts")
     void test5() throws Exception {
         //given
         List<Post> requestPosts = IntStream.range(1,20)
@@ -162,7 +161,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("페이지를 0으로 요청하면 첫 페이지를 가져온다.")
+    @DisplayName("get first page even if set page as 0")
     void test6() throws Exception {
         //given
         List<Post> requestPosts = IntStream.range(1,20)
@@ -183,6 +182,54 @@ class PostControllerTest {
                 .andExpect(jsonPath("$[0].id").value(19))
                 .andExpect(jsonPath("$[0].title").value("MY TITLE19"))
                 .andExpect(jsonPath("$[0].content").value("MY CONTENT19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("find multiple posts")
+    void test7() throws Exception {
+        //given
+        List<Post> requestPosts = IntStream.range(1,20)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("MY TITLE" + i)
+                            .content("MY CONTENT" + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
+
+        //expected
+        mockMvc.perform(get("/posts?page=1&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(10)))
+                .andExpect(jsonPath("$[0].id").value(19))
+                .andExpect(jsonPath("$[0].title").value("MY TITLE19"))
+                .andExpect(jsonPath("$[0].content").value("MY CONTENT19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Post Data Update")
+    void test8() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

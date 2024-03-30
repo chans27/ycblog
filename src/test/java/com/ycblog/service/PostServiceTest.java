@@ -3,6 +3,7 @@ package com.ycblog.service;
 import com.ycblog.domain.Post;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
+import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
 import com.ycblog.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,9 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @SpringBootTest
 class PostServiceTest {
@@ -53,13 +50,8 @@ class PostServiceTest {
         assertEquals("CONTENT", post.getContent());
     }
 
-    /**
-     * /posts -> 글 전체 조회(검색 + 페이징)
-     * /posts/{postId} -> 글 한개 조회
-     */
-
     @Test
-    @DisplayName("글 1개 조회")
+    @DisplayName("find one post")
     void test2() {
         //given
         Post requestPost = Post.builder()
@@ -78,7 +70,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("find multiple posts")
     void test3() {
         //given
         List<Post> requestPosts = IntStream.range(0,20)
@@ -91,8 +83,6 @@ class PostServiceTest {
                         .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0,5, Sort.by(DESC, "id"));
-
         PostSearch postSearch = PostSearch.builder()
                 .page(1)
                 .size(10)
@@ -104,5 +94,55 @@ class PostServiceTest {
         //then
         assertEquals(10L, posts.size());
         assertEquals("MY TITLE19", posts.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("Post Title Update")
+    void test4() {
+        //given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("NEW_TITLE")
+                .content("CONTENT")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("This post does not exist. id=" + post.getId()));
+        assertEquals("NEW_TITLE", changedPost.getTitle());
+        assertEquals("CONTENT", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("Post Content Update")
+    void test5() {
+        //given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("TITLE")
+                .content("NEW_CONTENT")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("This post does not exist. id=" + post.getId()));
+        assertEquals("TITLE", changedPost.getTitle());
+        assertEquals("NEW_CONTENT", changedPost.getContent());
     }
 }

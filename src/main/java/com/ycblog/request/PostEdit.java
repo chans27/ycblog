@@ -3,13 +3,10 @@ package com.ycblog.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-@Setter
 @Getter
-public class PostCreate {
+@Builder
+public class PostEdit {
 
     @NotBlank(message = "Title should not be blank")
     private String title;
@@ -17,7 +14,7 @@ public class PostCreate {
     private String content;
 
     @Builder
-    public PostCreate(String title, String content) {
+    public PostEdit(String title, String content) {
         this.title = title;
         this.content = content;
     }

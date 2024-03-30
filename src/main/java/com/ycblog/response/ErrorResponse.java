@@ -2,7 +2,6 @@ package com.ycblog.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
  *     "code": "400",
  *     "message" : "Bad Request."
  *     "validation" :{
- *         "title : "값을 입력해 주세요."
+ *         "title : "title should not be blank"
  *     }
  * }
  */
