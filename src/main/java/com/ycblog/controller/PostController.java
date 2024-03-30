@@ -1,6 +1,7 @@
 package com.ycblog.controller;
 
 import com.ycblog.request.PostCreate;
+import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
 import com.ycblog.response.PostResponse;
 import com.ycblog.service.PostService;
@@ -23,15 +24,19 @@ public class PostController {
         postService.write(request);
     }
 
-    //단건 데이터 조회
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable Long postId) {
         return postService.get(postId);
     }
 
-    //복수 데이터 조회
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
     }
+
+    @PatchMapping("posts/{postId}")
+    public void Edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
+    }
+
 }

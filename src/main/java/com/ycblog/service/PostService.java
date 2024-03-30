@@ -1,10 +1,13 @@
 package com.ycblog.service;
 
 import com.ycblog.domain.Post;
+import com.ycblog.domain.PostEditor;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
+import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
 import com.ycblog.response.PostResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -42,5 +45,22 @@ public class PostService {
         return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
+
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        PostEditor postEditor = editorBuilder
+                .title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        System.out.println("postEditor : " + postEditor.getTitle());
+
+        post.edit(postEditor);
     }
 }
