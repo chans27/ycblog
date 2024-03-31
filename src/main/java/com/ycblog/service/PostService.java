@@ -59,8 +59,6 @@ public class PostService {
                 .content(postEdit.getContent())
                 .build();
 
-        System.out.println("postEditor : " + postEditor.getTitle());
-
         post.edit(postEditor);
     }
 }

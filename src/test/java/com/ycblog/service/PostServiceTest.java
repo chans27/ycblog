@@ -132,7 +132,32 @@ class PostServiceTest {
         postRepository.save(post);
 
         PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("NEW_CONTENT")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("This post does not exist. id=" + post.getId()));
+        assertEquals("TITLE", changedPost.getTitle());
+        assertEquals("NEW_CONTENT", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("Post Content Update")
+    void test6() {
+        //given
+        Post post = Post.builder()
                 .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
                 .content("NEW_CONTENT")
                 .build();
 
