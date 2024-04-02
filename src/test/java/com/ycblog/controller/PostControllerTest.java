@@ -58,7 +58,6 @@ class PostControllerTest {
         //expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-                        //.content("{\"title\": \"TITLE\", \"content\": \"CONTENT\"}")
                         .content(json)
                 )
                 .andExpect(status().isOk())
@@ -67,7 +66,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 title값은 필수")
+    @DisplayName("title required")
         void test2() throws Exception {
             //given
             PostCreate request = PostCreate.builder()
@@ -84,7 +83,7 @@ class PostControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("Bad Request."))
-                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
+                .andExpect(jsonPath("$.validation.title").value("Title should not be blank"))
                 .andDo(print());
     }
 
@@ -229,6 +228,23 @@ class PostControllerTest {
         mockMvc.perform(patch("/posts/{postId}", post.getId())
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Post Delete")
+    void test9() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        //expected
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

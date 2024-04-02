@@ -61,4 +61,11 @@ public class PostService {
 
         post.edit(postEditor);
     }
+
+    public void delete(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
+
+        postRepository.delete(post);
+    }
 }
