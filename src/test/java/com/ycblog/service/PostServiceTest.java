@@ -73,14 +73,14 @@ class PostServiceTest {
     @DisplayName("find multiple posts")
     void test3() {
         //given
-        List<Post> requestPosts = IntStream.range(0,20)
-                        .mapToObj(i -> {
-                            return Post.builder()
-                                    .title("MY TITLE" + i)
-                                    .content("MY CONTENT" + i)
-                                    .build();
-                        })
-                        .collect(Collectors.toList());
+        List<Post> requestPosts = IntStream.range(0, 20)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("MY TITLE" + i)
+                            .content("MY CONTENT" + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
         PostSearch postSearch = PostSearch.builder()
@@ -170,4 +170,21 @@ class PostServiceTest {
         assertEquals("TITLE", changedPost.getTitle());
         assertEquals("NEW_CONTENT", changedPost.getContent());
     }
+
+    @Test
+    @DisplayName("delete post")
+    void test7() {
+        //given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        //when
+        postService.delete(post.getId());
+        //then
+        assertEquals(postRepository.count(), 0);
+    }
+
 }
