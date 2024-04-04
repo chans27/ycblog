@@ -2,6 +2,7 @@ package com.ycblog.service;
 
 import com.ycblog.domain.Post;
 import com.ycblog.domain.PostEditor;
+import com.ycblog.exception.PostNotFound;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
 import com.ycblog.request.PostEdit;
@@ -33,7 +34,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
+                .orElseThrow(PostNotFound::new);
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -50,7 +51,7 @@ public class PostService {
     @Transactional
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
+                .orElseThrow(PostNotFound::new);
 
         PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
 
@@ -64,7 +65,7 @@ public class PostService {
 
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("This post does not exist."));
+                .orElseThrow(PostNotFound::new);
 
         postRepository.delete(post);
     }

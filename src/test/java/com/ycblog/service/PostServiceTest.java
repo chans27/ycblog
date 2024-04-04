@@ -1,11 +1,13 @@
 package com.ycblog.service;
 
 import com.ycblog.domain.Post;
+import com.ycblog.exception.PostNotFound;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
 import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
 import com.ycblog.response.PostResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PostServiceTest {
@@ -174,6 +175,55 @@ class PostServiceTest {
     @Test
     @DisplayName("delete post")
     void test7() {
+        // given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        // when
+        postService.delete(post.getId());
+        // then
+        assertEquals(postRepository.count(), 0);
+    }
+
+    @Test
+    @DisplayName("find - not exist post")
+    void test8() {
+        // given
+        Post post = Post.builder()
+                .title("YEACHAN")
+                .content("CON")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        //error msg validation
+        Assertions.assertThrows(PostNotFound.class, () -> {
+          postService.get(post.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("delete - not exist post")
+    void test9() {
+        // given
+        Post post = Post.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("update - post not exist")
+    void test10() {
         //given
         Post post = Post.builder()
                 .title("TITLE")
@@ -181,10 +231,13 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
 
-        //when
-        postService.delete(post.getId());
-        //then
-        assertEquals(postRepository.count(), 0);
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("NEW_CONTENT")
+                .build();
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+           postService.edit(post.getId() + 1, postEdit);
+        });
     }
-
 }
