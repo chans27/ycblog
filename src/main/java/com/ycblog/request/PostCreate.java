@@ -1,5 +1,6 @@
 package com.ycblog.request;
 
+import com.ycblog.exception.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,5 +21,11 @@ public class PostCreate {
     public PostCreate(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void validate() {
+        if(title.toLowerCase().contains("java")) {
+            throw new InvalidRequest("title", "'java' could not be included in title");
+        }
     }
 }
