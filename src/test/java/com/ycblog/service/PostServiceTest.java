@@ -240,4 +240,5 @@ class PostServiceTest {
            postService.edit(post.getId() + 1, postEdit);
         });
     }
+
 }

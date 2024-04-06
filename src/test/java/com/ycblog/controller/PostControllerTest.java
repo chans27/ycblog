@@ -101,8 +101,7 @@ class PostControllerTest {
         //when
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-                        .content("{\"title\": \"TITLE\" , \"content\": \"CONTENT\"}")
-                )
+                        .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -246,6 +245,50 @@ class PostControllerTest {
         mockMvc.perform(delete("/posts/{postId}", post.getId())
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("find - not exist post")
+    void test10() throws Exception{
+        mockMvc.perform(get("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("update - not exist post")
+    void test11() throws Exception{
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("TITLE")
+                .content("CONTENT")
+                .build();
+
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("'java' can not be included in title")
+    void test12() throws Exception {
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("java Spring")
+                .content("CONTENT")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request); // java object -> json
+
+        //when
+        mockMvc.perform(post("/posts")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 }
