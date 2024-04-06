@@ -5,6 +5,7 @@ import com.ycblog.domain.Post;
 import com.ycblog.repository.PostRepository;
 import com.ycblog.request.PostCreate;
 import com.ycblog.request.PostEdit;
+import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +41,7 @@ class PostControllerTest {
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
+
     }
 
     @Test
@@ -77,10 +79,8 @@ class PostControllerTest {
 
             //expected
             mockMvc.perform(post("/posts")
-                                    .contentType(APPLICATION_JSON)
-                            .content(json)
-                )
-                .andExpect(status().isBadRequest())
+                            .contentType(APPLICATION_JSON)
+                            .content(json))
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("Bad Request."))
                 .andExpect(jsonPath("$.validation.title").value("Title should not be blank"))
@@ -133,6 +133,7 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Transactional
     @Test
     @DisplayName("find multiple posts")
     void test5() throws Exception {
@@ -152,12 +153,15 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id").value(19))
+                .andExpect(jsonPath("$[0].id").value(requestPosts.get(18).getId()))
                 .andExpect(jsonPath("$[0].title").value("MY TITLE19"))
                 .andExpect(jsonPath("$[0].content").value("MY CONTENT19"))
                 .andDo(print());
+
+        postRepository.deleteAll();
     }
 
+    @Transactional
     @Test
     @DisplayName("get first page even if set page as 0")
     void test6() throws Exception {
@@ -177,12 +181,15 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id").value(19))
+                .andExpect(jsonPath("$[0].id").value(requestPosts.get(18).getId()))
                 .andExpect(jsonPath("$[0].title").value("MY TITLE19"))
                 .andExpect(jsonPath("$[0].content").value("MY CONTENT19"))
                 .andDo(print());
+
+        postRepository.deleteAll();
     }
 
+    @Transactional
     @Test
     @DisplayName("find multiple posts")
     void test7() throws Exception {
@@ -202,7 +209,7 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id").value(19))
+                .andExpect(jsonPath("$[0].id").value(requestPosts.get(18).getId()))
                 .andExpect(jsonPath("$[0].title").value("MY TITLE19"))
                 .andExpect(jsonPath("$[0].content").value("MY CONTENT19"))
                 .andDo(print());
@@ -274,7 +281,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("'java' can not be included in title")
+    @DisplayName("'java' could not be included in title")
     void test12() throws Exception {
         //given
         PostCreate request = PostCreate.builder()

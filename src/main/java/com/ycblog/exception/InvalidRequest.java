@@ -1,8 +1,12 @@
 package com.ycblog.exception;
 
+import lombok.Getter;
+
 /**
  * status -> 400
  */
+@Getter
+
 public class InvalidRequest extends YcblogException {
 
     private static final String MESSAGE = "Bad Request";
@@ -11,8 +15,9 @@ public class InvalidRequest extends YcblogException {
         super(MESSAGE);
     }
 
-    public InvalidRequest(Throwable cause) {
-        super(MESSAGE, cause);
+    public InvalidRequest(String fieldName, String message) {
+        super(MESSAGE);
+        addValidation(fieldName, message);
     }
 
     @Override

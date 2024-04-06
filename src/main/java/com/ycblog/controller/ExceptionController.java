@@ -33,17 +33,16 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(YcblogException.class)
-    public ResponseEntity<ErrorResponse>  postNotFound(YcblogException e) {
+    public ResponseEntity<ErrorResponse> ycblogException(YcblogException e) {
         int statusCode = e.getStatusCode();
 
         ErrorResponse body = ErrorResponse.builder()
                 .code(String.valueOf(statusCode))
                 .message(e.getMessage())
+                .validation(e.getValidation())
                 .build();
 
-        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+        return ResponseEntity.status(statusCode)
                 .body(body);
-
-        return response;
     }
 }

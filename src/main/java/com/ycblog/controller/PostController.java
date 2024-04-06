@@ -1,6 +1,5 @@
 package com.ycblog.controller;
 
-import com.ycblog.exception.InvalidRequest;
 import com.ycblog.request.PostCreate;
 import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
@@ -22,9 +21,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
-        if(request.getTitle().toLowerCase().contains("java")) {
-            throw new InvalidRequest();
-        }
+        request.validate();
         postService.write(request);
     }
 
