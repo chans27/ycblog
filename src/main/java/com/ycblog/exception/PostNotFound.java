@@ -1,6 +1,9 @@
 package com.ycblog.exception;
 
-public class PostNotFound extends RuntimeException {
+/**
+ * status -> 404
+ */
+public class PostNotFound extends YcblogException {
 
     private static final String MESSAGE = "Post does not exist";
 
@@ -10,5 +13,10 @@ public class PostNotFound extends RuntimeException {
 
     public PostNotFound(Throwable cause) {
         super(MESSAGE, cause);
+    }
+
+    @Override
+    public int getStatusCode() {
+        return 404;
     }
 }
