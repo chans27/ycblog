@@ -104,7 +104,6 @@ class PostControllerTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
-
         //then
         assertEquals(1L, postRepository.count());
 
