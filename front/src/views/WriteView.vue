@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import axios from "axios";
+import {useRouter} from "vue-router";
 
 const title = ref("")
 const content = ref("")
 
+const router = useRouter()
+
 const write = function() {
-  axios.post("http://localhost:8080/posts", {
+  axios.post("api/posts", {
     title: title.value,
     content: content.value
-  });
+  })
+      .then(() => {
+        router.replace({name : "home"})
+      })
 }
 </script>
 
@@ -24,7 +30,7 @@ const write = function() {
     </div>
 
     <div class="mt-2">
-        <el-button type="primary" @click="write">Post</el-button>
+        <el-button type="primary" @click="write()">Post</el-button>
     </div>
   </div>
 </template>
