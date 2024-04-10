@@ -30,7 +30,9 @@ const write = function() {
     </div>
 
     <div class="mt-2">
+      <div class="d-flex justify-content-end">
         <el-button type="primary" @click="write()">Post</el-button>
+      </div>
     </div>
   </div>
 </template>
