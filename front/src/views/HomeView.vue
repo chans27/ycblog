@@ -3,19 +3,20 @@
   import {ref} from "vue";
   import {useRouter} from "vue-router";
 
+  interface Post {
+    id: number;
+    title: string;
+    content: string;
+  }
+
   const router = useRouter();
-  const posts = ref([]);
+  const posts = ref<Post[]>([])
 
     axios.get("api/posts?page=1&size=5", ).then(response => {
-      response.data.forEach((r:any) => {
+      response.data.forEach((r: Post) => {
         posts.value.push(r);
       })
     })
-
-  const moveToRead = () => {
-      router.push({ name : "read"})
-  }
-
 </script>
 
 <template>
