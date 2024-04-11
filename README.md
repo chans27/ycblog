@@ -3,7 +3,7 @@
 ### Cloud Server構築中
 
 ## [予定]
-### 口コミ -> テーブルモデリング (= Comment Entity)
+### コメント -> テーブルモデリング (= Comment Entity)
 
 ### 公開、非公開　（ステート）　-> (Enum)
 
