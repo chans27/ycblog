@@ -1,5 +1,7 @@
 # ycblog
 
+### Cloud Server構築中
+
 ## [予定]
 ### 口コミ -> テーブルモデリング (= Comment Entity)
 
