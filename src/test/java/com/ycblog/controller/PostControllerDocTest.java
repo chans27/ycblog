@@ -21,6 +21,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +56,7 @@ public class PostControllerDocTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("index",
+                .andDo(document("post-inquiry",
                         pathParameters(
                             parameterWithName("postId").description("投稿ID")
                         ),
@@ -87,10 +88,10 @@ public class PostControllerDocTest {
 
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("index",
+                .andDo(document("post-create",
                         requestFields(
-                                fieldWithPath("title").description("投稿タイトル"),
-                                fieldWithPath("content").description("内容例")
+                                fieldWithPath("title").description("投稿タイトル").attributes(key("constraint").value("タイトルを入力する")),
+                                fieldWithPath("content").description("内容例").optional()
                         )
                 ));
     }

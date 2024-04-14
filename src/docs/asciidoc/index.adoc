@@ -1,20 +1,32 @@
 = ycblog API
-:toc:
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc:left
+:toclevels: 2
+:sectlinks:
 
 == 投稿１件 読み取り
 
 === リクエスト
 
-include::{snippets}/index/http-request.adoc[]
+include::{snippets}/post-inquiry/http-request.adoc[]
 
-include::{snippets}/index/path-parameters.adoc[]
-
-include::{snippets}/index/request-fields.adoc[]
+include::{snippets}/post-inquiry/path-parameters.adoc[]
 
 === レスポンス
-include::{snippets}/index/http-response.adoc[]
+include::{snippets}/post-inquiry/http-response.adoc[]
 
-include::{snippets}/index/response-fields.adoc[]
+include::{snippets}/post-inquiry/response-fields.adoc[]
 
-=== CURL
-include::{snippets}/index/curl-request.adoc[]
+
+== 投稿作成
+
+=== リクエスト
+
+include::{snippets}/post-create/http-request.adoc[]
+
+include::{snippets}/post-create/request-fields.adoc[]
+
+=== レスポンス
+include::{snippets}/post-create/http-response.adoc[]
