@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -41,30 +42,6 @@ class PostControllerTest {
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
-
-    }
-
-    @Test
-    @DisplayName("print hello world")
-    void test() throws Exception {
-        //given
-        PostCreate request = PostCreate.builder()
-                .title("TITLE")
-                .content("CONTENT")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request); // java object -> json
-
-        System.out.println("json : " + json);
-
-        //expected
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(""))
-                .andDo(print());
     }
 
     @Test
@@ -99,7 +76,9 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request); // java object -> json
 
         //when
-        mockMvc.perform(post("/posts")
+        // authorization (Header)
+                mockMvc.perform(post("/posts")
+                        .header("authorization", "chan")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())

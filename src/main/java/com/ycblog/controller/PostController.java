@@ -19,6 +19,7 @@ public class PostController {
 
     private final PostService postService;
 
+    //auth by Get Parameter
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
         request.validate();
