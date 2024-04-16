@@ -19,6 +19,16 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "hello";
+    }
+
+    @GetMapping("/foo")
+    public String foo() {
+        return "foo";
+    }
+
     //auth by Get Parameter
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
