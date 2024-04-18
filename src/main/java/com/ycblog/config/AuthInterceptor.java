@@ -16,6 +16,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String accessToken = request.getParameter("accessToken");
         if (accessToken != null && accessToken.equals("chan")) {
+            request.setAttribute("userName", accessToken);
             return true;
         }
 
