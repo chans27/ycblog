@@ -1,5 +1,6 @@
 package com.ycblog.controller;
 
+import com.ycblog.config.data.UserSession;
 import com.ycblog.request.PostCreate;
 import com.ycblog.request.PostEdit;
 import com.ycblog.request.PostSearch;
@@ -25,8 +26,8 @@ public class PostController {
     }
 
     @GetMapping("/foo")
-    public String foo(@RequestAttribute("userName") String userName) {
-        log.info(">>>{}", userName);
+    public String foo(UserSession userSession) {
+        log.info(">>>{}", userSession.name);
         return "foo";
     }
 
