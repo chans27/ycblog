@@ -15,11 +15,12 @@ public class AuthInterceptor implements HandlerInterceptor {
     log.info(">> prehandle");
 
         String accessToken = request.getParameter("accessToken");
-        if (accessToken != null && accessToken.equals("chan")) {
+        if (accessToken != null && accessToken.equals("")) {
+            log.info("accessible");
             request.setAttribute("userName", accessToken);
             return true;
         }
-
+        log.info("not accessible");
         throw new Unauthorized();
     }
 

@@ -28,7 +28,12 @@ public class PostController {
     @GetMapping("/foo")
     public String foo(UserSession userSession) {
         log.info(">>>{}", userSession.name);
-        return "foo";
+        return userSession.name;
+    }
+
+    @GetMapping("/bar")
+    public String bar(UserSession userSession) {
+        return "authorization required";
     }
 
     //auth by Get Parameter
