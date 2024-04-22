@@ -1,0 +1,6 @@
+# Postman과 같이 쉽게 리퀘스트 요청 가능
+
+### Test Reuqest
+GET http://localhost:8080/foo
+Content-Type: application/json
+Authorization: testvalue
