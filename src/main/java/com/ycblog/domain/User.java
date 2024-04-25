@@ -1,17 +1,16 @@
 package com.ycblog.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "member")
 @Getter
 public class User {
 
@@ -26,4 +25,12 @@ public class User {
     private String password;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    public User(String name, String email, String password, LocalDateTime createdAt) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
 }

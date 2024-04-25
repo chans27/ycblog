@@ -1,2 +1,2 @@
-INSERT INTO `user` (name, email, password, created_at)
-VALUES ('chan', 'chan@naver.com', '1234', '2024-04-24 22:00:00')
+INSERT INTO `member` (created_at, name, email, password)
+VALUES ('2024-04-25 20:00:00', 'chan', 'chan27@naver.com', '1234')
