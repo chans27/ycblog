@@ -4,6 +4,6 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email" : "everever1275@gmail.com",
+  "email" : "chan27@naver.com",
   "password" : "1234"
 }

@@ -1,5 +1,7 @@
 package com.ycblog.controller;
 
+import com.ycblog.domain.User;
+import com.ycblog.exception.InvalidSIgnInInformation;
 import com.ycblog.repository.UserRepository;
 import com.ycblog.request.Login;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,11 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/auth/login")
-    public void login(@RequestBody Login login) {
-
+    public User login(@RequestBody Login login) {
         //find in DB
+        User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
+                .orElseThrow(InvalidSIgnInInformation::new);
         //token
+        return user;
     }
 }
