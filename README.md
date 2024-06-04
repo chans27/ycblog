@@ -1,6 +1,6 @@
 # ycblog
 
---http://15.164.248.133:8080/docs/index.html
+~~http://15.164.248.133:8080/docs/index.html~~
 
 ## [予定]
 ### コメント -> テーブルモデリング (= Comment Entity)
