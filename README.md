@@ -1,4 +1,4 @@
-# ycblog
+# ycblog (開発保留中)
 
 ~~http://15.164.248.133:8080/docs/index.html~~
 
